@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const addressSchema = new Schema({
-  pincode: {
-    type: Number,
-    required: true,
-  },
-  street: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-    minLength: 10,
-    maxLength: 10,
-  },
-});
+// const addressSchema = new Schema({
+//   pincode: {
+//     type: Number,
+//     required: true,
+//   },
+//   street: {
+//     type: String,
+//     required: true,
+//   },
+//   phone: {
+//     type: String,
+//     required: true,
+//     minLength: 10,
+//     maxLength: 10,
+//   },
+// });
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -27,6 +27,7 @@ const userSchema = new Schema({
     type: String,
     maxLength: 16,
   },
+  cart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   age: {
     type: Number,
     min: 12,
@@ -34,6 +35,7 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     validate: {
       validator: function (v) {
@@ -43,6 +45,12 @@ const userSchema = new Schema({
       message: (props) => `${props.value} is not a valid email!`,
     },
   },
-  address: addressSchema, // Embedding the address schema
+  password: {
+    type: String,
+    required: true,
+    minLength: 8,
+  },
+  token: String,
+  // address: addressSchema, // Embedding the address schema
 });
 exports.User = mongoose.model("User", userSchema);

@@ -4,16 +4,6 @@ const fs = require("fs");
 //const index = fs.readFileSync("index.html", "utf-8");
 const model = require("../Model/user");
 const User = model.User;
-exports.createUser = async (req, res) => {
-  try {
-    const user = new User(req.body);
-    const savedUser = await user.save();
-    res.status(201).json(savedUser);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
-  }
-};
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -27,7 +17,8 @@ exports.getAllUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const user = await User.findById(id); //  const User =await User.findById(mongoose.isObjectIdOrHexString(id))
+    // const user = await User.findById(id); //  const User =await User.findById(mongoose.isObjectIdOrHexString(id))
+    const user = await User.findById(id).populate("cart"); //populate matlab cart waala process
 
     res.json(user);
   } catch (err) {
@@ -37,7 +28,7 @@ exports.getUser = async (req, res) => {
 exports.replaceUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const doc = await User.findOneAndReplace({ _id: id }, req.body, {
+    const doc = await User.findOneAndReplace({ id: id }, req.body, {
       new: true,
     });
     res.status(201).json(doc);
@@ -48,7 +39,7 @@ exports.replaceUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const doc = await User.findOneAndUpdate({ _id: id }, req.body, {
+    const doc = await User.findOneAndUpdate({ id: id }, req.body, {
       new: true,
     });
     res.status(201).json(doc);
@@ -59,7 +50,7 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const doc = await User.findOneAndDelete({ _id: id });
+    const doc = await User.findOneAndDelete({ id: id });
     res.status(201).json(doc);
   } catch (err) {
     res.status(500).json(err);
