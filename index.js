@@ -55,7 +55,6 @@ io.on("Connection", (socket) => {
 });
 // Middleware
 // server.use(cors());
-server.use(cors({ origin: "http://localhost:5173" }));
 server.use(express.json());
 // server.use(express.urlencoded());
 // Routes
